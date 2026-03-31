@@ -12,6 +12,10 @@ import Robots from "./pages/Robots";
 import ControlPanel from "./pages/ControlPanel";
 import Analytics from "./pages/Analytics";
 import SettingsPage from "./pages/SettingsPage";
+import CameraVision from "./pages/CameraVision";
+import RobotHealth from "./pages/RobotHealth";
+import Environment from "./pages/Environment";
+import ActivityTimeline from "./pages/ActivityTimeline";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +35,10 @@ const App = () => (
             <Route path="/robots" element={<Robots />} />
             <Route path="/control" element={<ControlPanel />} />
             <Route path="/analytics" element={<Analytics />} />
+            <Route path="/camera" element={<CameraVision />} />
+            <Route path="/robot-health" element={<RobotHealth />} />
+            <Route path="/environment" element={<Environment />} />
+            <Route path="/activity" element={<ActivityTimeline />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
