@@ -1,4 +1,4 @@
-import { Package, Bot, ShoppingCart, TrendingUp, AlertTriangle, Clock, ArrowUpRight } from "lucide-react";
+import { Package, Bot, ShoppingCart, TrendingUp, AlertTriangle, Clock, ArrowUpRight, Activity, Zap, Battery, Wifi, Server, Database, Settings, ShieldCheck } from "lucide-react";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { motion } from "framer-motion";
 import { robots, orders, inventoryItems } from "@/data/warehouse";
@@ -50,6 +50,68 @@ export default function Dashboard() {
         <StatCard title="Efficiency" value="94.2%" change="+2.1%" changeType="positive" icon={TrendingUp} iconColor="bg-primary" />
       </div>
 
+      <div>
+        <h2 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+          <Zap className="w-4 h-4 text-primary" />
+          Power Information
+          <span className="text-xs font-normal text-muted-foreground ml-auto flex items-center gap-1">
+            <Clock className="w-3.5 h-3.5" /> As of 31 Mar 2026, 3:09 PM
+          </span>
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <StatCard title="Voltage" value="1 V" icon={Activity} />
+          <StatCard title="Current" value="1 A" icon={Activity} />
+          <StatCard title="Power" value="1 kW" icon={Zap} />
+          <StatCard title="Energy" value="1 kWh" icon={Battery} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="stat-card">
+          <h3 className="text-sm font-semibold text-foreground mb-4">Quick Actions</h3>
+          <div className="grid grid-cols-2 gap-3">
+             <button className="flex flex-col items-center justify-center p-3 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-colors">
+               <Bot className="w-5 h-5 mb-2" />
+               <span className="text-xs font-medium">Deploy Robot</span>
+             </button>
+             <button className="flex flex-col items-center justify-center p-3 rounded-lg bg-destructive/10 text-destructive hover:bg-destructive hover:text-destructive-foreground transition-colors">
+               <AlertTriangle className="w-5 h-5 mb-2" />
+               <span className="text-xs font-medium">Emergency Stop</span>
+             </button>
+             <button className="flex flex-col items-center justify-center p-3 rounded-lg bg-slot-reserved/10 text-slot-reserved hover:bg-slot-reserved hover:text-primary-foreground transition-colors">
+               <Package className="w-5 h-5 mb-2" />
+               <span className="text-xs font-medium">Restock Request</span>
+             </button>
+             <button className="flex flex-col items-center justify-center p-3 rounded-lg bg-secondary text-foreground hover:bg-secondary/80 transition-colors">
+               <Settings className="w-5 h-5 mb-2" />
+               <span className="text-xs font-medium">System Config</span>
+             </button>
+          </div>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="stat-card">
+          <h3 className="text-sm font-semibold text-foreground mb-4">System Health</h3>
+          <div className="space-y-4">
+             <div className="flex items-center justify-between">
+               <span className="text-sm text-muted-foreground flex items-center gap-2"><Wifi className="w-4 h-4 text-primary" /> Wi-Fi Signal</span>
+               <span className="text-sm font-semibold text-slot-empty">Excellent (98%)</span>
+             </div>
+             <div className="flex items-center justify-between">
+               <span className="text-sm text-muted-foreground flex items-center gap-2"><Server className="w-4 h-4 text-primary" /> Backend Latency</span>
+               <span className="text-sm font-semibold text-slot-empty">42ms</span>
+             </div>
+             <div className="flex items-center justify-between">
+               <span className="text-sm text-muted-foreground flex items-center gap-2"><Database className="w-4 h-4 text-primary" /> Database Sync</span>
+               <span className="text-sm font-semibold text-slot-inprogress">Syncing...</span>
+             </div>
+             <div className="flex items-center justify-between pt-2 border-t border-border/50">
+               <span className="text-xs text-muted-foreground flex items-center gap-1"><ShieldCheck className="w-3.5 h-3.5" /> Secure Connection</span>
+               <span className="text-xs text-primary cursor-pointer hover:underline">View Logs</span>
+             </div>
+          </div>
+        </motion.div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 stat-card">
           <h3 className="text-sm font-semibold text-foreground mb-4">Rack Utilization</h3>
@@ -88,12 +150,11 @@ export default function Dashboard() {
             {robots.map(robot => (
               <div key={robot.id} className="flex items-center justify-between py-2 border-b border-border/30 last:border-0">
                 <div className="flex items-center gap-3">
-                  <div className={`w-2 h-2 rounded-full ${
-                    robot.status === 'moving' ? 'bg-slot-inprogress animate-pulse' :
+                  <div className={`w-2 h-2 rounded-full ${robot.status === 'moving' ? 'bg-slot-inprogress animate-pulse' :
                     robot.status === 'idle' ? 'bg-slot-empty' :
-                    robot.status === 'charging' ? 'bg-slot-reserved' :
-                    'bg-destructive animate-pulse'
-                  }`} />
+                      robot.status === 'charging' ? 'bg-slot-reserved' :
+                        'bg-destructive animate-pulse'
+                    }`} />
                   <span className="text-sm font-medium text-foreground font-mono">{robot.name}</span>
                 </div>
                 <div className="flex items-center gap-4">
@@ -117,12 +178,11 @@ export default function Dashboard() {
             {activityLog.map((log, i) => (
               <div key={i} className="flex items-start gap-3 py-2 border-b border-border/30 last:border-0">
                 <span className="text-[11px] text-muted-foreground font-mono w-12 flex-shrink-0 pt-0.5">{log.time}</span>
-                <div className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${
-                  log.type === 'error' ? 'bg-destructive' :
+                <div className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${log.type === 'error' ? 'bg-destructive' :
                   log.type === 'alert' ? 'bg-slot-reserved' :
-                  log.type === 'robot' ? 'bg-slot-inprogress' :
-                  'bg-slot-empty'
-                }`} />
+                    log.type === 'robot' ? 'bg-slot-inprogress' :
+                      'bg-slot-empty'
+                  }`} />
                 <p className="text-sm text-foreground/80">{log.action}</p>
               </div>
             ))}

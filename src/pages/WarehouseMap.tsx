@@ -5,10 +5,10 @@ import { motion } from "framer-motion";
 import { Bot } from "lucide-react";
 
 const statusColors: Record<string, string> = {
-  empty: 'bg-slot-empty hover:bg-slot-empty/80',
-  occupied: 'bg-slot-occupied hover:bg-slot-occupied/80',
-  reserved: 'bg-slot-reserved hover:bg-slot-reserved/80',
-  inprogress: 'bg-slot-inprogress hover:bg-slot-inprogress/80 animate-pulse-glow',
+  empty: 'bg-slot-empty',
+  occupied: 'bg-slot-occupied',
+  reserved: 'bg-slot-reserved',
+  inprogress: 'bg-slot-inprogress',
 };
 
 export default function WarehouseMap() {
@@ -46,23 +46,28 @@ export default function WarehouseMap() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: rackIdx * 0.05 }}
-              className="rounded-xl border border-border/50 bg-card/50 p-4"
+              className="rounded-md border-x-8 border-y-4 border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-900 p-4 shadow-[inset_0_10px_20px_rgba(0,0,0,0.1)] dark:shadow-[inset_0_10px_20px_rgba(0,0,0,0.5)] relative overflow-hidden"
             >
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-bold text-foreground font-mono">RACK {rack.label}</h3>
-                <span className="text-[10px] text-muted-foreground">
+              {/* Industrial Rack Header */}
+              <div className="flex items-center justify-between mb-4 pb-2 border-b-2 border-gray-300 dark:border-gray-800">
+                <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 tracking-wider font-mono drop-shadow">RACK {rack.label}</h3>
+                <span className="text-[10px] font-bold text-gray-600 dark:text-gray-500 bg-black/5 dark:bg-black/40 px-2 py-0.5 rounded-sm">
                   {rack.slots.filter(s => s.status === 'empty').length}/{rack.slots.length} free
                 </span>
               </div>
-              <div className="grid grid-cols-4 gap-1.5">
+              
+              <div className="grid grid-cols-4 gap-2 relative z-10">
                 {rack.slots.map(slot => (
                   <button
                     key={slot.id}
                     onClick={() => setSelectedSlot(slot)}
-                    className={`relative h-10 rounded-md text-[10px] font-bold text-foreground/90 transition-all duration-200 cursor-pointer ${statusColors[slot.status]} ${selectedSlot?.id === slot.id ? 'ring-2 ring-foreground scale-110 z-10' : 'hover:scale-105'}`}
+                    className={`relative flex items-center justify-center h-12 rounded-sm text-[10px] font-bold text-white transition-all duration-300 cursor-pointer 
+                    bg-gradient-to-b from-white/40 to-black/10 dark:from-white/20 dark:to-black/40 
+                    shadow-[inset_0_1px_1px_rgba(255,255,255,0.7),inset_0_-4px_8px_rgba(0,0,0,0.2),0_4px_6px_rgba(0,0,0,0.2)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),inset_0_-4px_8px_rgba(0,0,0,0.6),0_4px_6px_rgba(0,0,0,0.5)]
+                    border border-black/20 dark:border-black/50 ${statusColors[slot.status]} ${selectedSlot?.id === slot.id ? 'ring-2 ring-primary scale-110 z-20 brightness-110 dark:brightness-125' : 'hover:brightness-110 dark:hover:brightness-125 hover:-translate-y-0.5'}`}
                     title={slot.item ? `${slot.item.name} (${slot.item.sku})` : 'Empty'}
                   >
-                    {slot.label}
+                    <span className="drop-shadow-md">{slot.label}</span>
                   </button>
                 ))}
               </div>
