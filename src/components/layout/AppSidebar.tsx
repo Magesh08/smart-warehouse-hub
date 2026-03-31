@@ -1,4 +1,4 @@
-import { LayoutDashboard, Map, Package, ShoppingCart, Bot, BarChart3, Settings, SlidersHorizontal, Warehouse } from "lucide-react";
+import { LayoutDashboard, Map, Package, ShoppingCart, Bot, BarChart3, Settings, SlidersHorizontal, Warehouse, Camera, HeartPulse, Thermometer, ClipboardList } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import {
@@ -23,6 +23,13 @@ const mainItems = [
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
 ];
 
+const monitoringItems = [
+  { title: "Camera & Vision", url: "/camera", icon: Camera },
+  { title: "Robot Health", url: "/robot-health", icon: HeartPulse },
+  { title: "Environment", url: "/environment", icon: Thermometer },
+  { title: "Activity Log", url: "/activity", icon: ClipboardList },
+];
+
 const systemItems = [
   { title: "Settings", url: "/settings", icon: Settings },
 ];
@@ -31,6 +38,26 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
+
+  const renderMenu = (items: typeof mainItems) => (
+    <SidebarMenu>
+      {items.map((item) => (
+        <SidebarMenuItem key={item.title}>
+          <SidebarMenuButton asChild>
+            <NavLink
+              to={item.url}
+              end={item.url === "/"}
+              className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
+              activeClassName="bg-sidebar-accent text-primary font-medium"
+            >
+              <item.icon className="w-4 h-4 mr-2 flex-shrink-0" />
+              {!collapsed && <span className="truncate">{item.title}</span>}
+            </NavLink>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      ))}
+    </SidebarMenu>
+  );
 
   return (
     <Sidebar collapsible="icon" className="border-r-0">
@@ -49,47 +76,17 @@ export function AppSidebar() {
 
         <SidebarGroup>
           <SidebarGroupLabel className="text-sidebar-foreground/40 text-[10px] uppercase tracking-widest">Main</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {mainItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink
-                      to={item.url}
-                      end={item.url === "/"}
-                      className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
-                      activeClassName="bg-sidebar-accent text-primary font-medium"
-                    >
-                      <item.icon className="w-4 h-4 mr-2 flex-shrink-0" />
-                      {!collapsed && <span className="truncate">{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+          <SidebarGroupContent>{renderMenu(mainItems)}</SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-sidebar-foreground/40 text-[10px] uppercase tracking-widest">Monitoring</SidebarGroupLabel>
+          <SidebarGroupContent>{renderMenu(monitoringItems)}</SidebarGroupContent>
         </SidebarGroup>
 
         <SidebarGroup>
           <SidebarGroupLabel className="text-sidebar-foreground/40 text-[10px] uppercase tracking-widest">System</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {systemItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink
-                      to={item.url}
-                      className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
-                      activeClassName="bg-sidebar-accent text-primary font-medium"
-                    >
-                      <item.icon className="w-4 h-4 mr-2 flex-shrink-0" />
-                      {!collapsed && <span className="truncate">{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+          <SidebarGroupContent>{renderMenu(systemItems)}</SidebarGroupContent>
         </SidebarGroup>
 
         {!collapsed && (
@@ -99,7 +96,7 @@ export function AppSidebar() {
                 <div className="w-2 h-2 rounded-full bg-slot-empty animate-pulse" />
                 <span className="text-[11px] font-medium text-sidebar-accent-foreground">System Online</span>
               </div>
-              <p className="text-[10px] text-sidebar-foreground/50">5 robots active · 3 orders</p>
+              <p className="text-[10px] text-sidebar-foreground/50">5 robots active · 6 cameras</p>
             </div>
           </div>
         )}
